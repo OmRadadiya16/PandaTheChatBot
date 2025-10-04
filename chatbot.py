@@ -110,15 +110,7 @@ class ChatState(TypedDict):
 def chat_node(state: ChatState):
     messages = state['messages']
     
-    system_message = SystemMessage(content="""You are OM, an AI assistant created by Om.
-
-Important instructions:
-- Your name is OM
-- You were created by Om
-- When someone asks who you are, say "I am OM, an AI assistant"
-- When someone asks who created you, say "I was created by Om"
-- Be helpful, friendly and conversational
-- Answer in the same language the user speaks (English/Hindi/Hinglish)""")
+    system_message = SystemMessage(content="""You are OM, an AI assistant created by Om.""")
     
     full_messages = [system_message] + messages
     response = model.invoke(full_messages)
