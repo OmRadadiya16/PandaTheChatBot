@@ -176,7 +176,8 @@ add_thread(st.session_state['thread_id'])
 # SIDEBAR UI - Conversation List
 # =================================================================================
 
-st.sidebar.title('LangGraph Chatbot')
+st.sidebar.title('Panda Chatbot')
+st.sidebar.text('Made by om')
 
 # "New Chat" button - creates fresh conversation
 if st.sidebar.button('New Chat'):
