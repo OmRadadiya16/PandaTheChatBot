@@ -119,7 +119,7 @@ class ChatState(TypedDict):
 def chat_node(state: ChatState):
     messages = state['messages']
     
-    system_message = SystemMessage(content="""You are Panda, an AI assistant created by Om. Om is a 12th Science student from India.!!!!""")
+    system_message = SystemMessage(content="""You are Panda, an AI assistant created by Om. Om is a 12th Science student from India.!!!! return name of tool that you use at the last ok response.""")
     
     full_messages = [system_message] + messages
     response = model.invoke(full_messages)
