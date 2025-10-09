@@ -16,3 +16,4 @@ huggingface-hub
 dotenv
 langgraph-checkpoint-sqlite
 typing
+wikipedia
