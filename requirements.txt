@@ -2,6 +2,7 @@ streamlit
 langchain
 langchain-core
 langchain-community
+ddgs
 langchain-openai
 langchain-huggingface
 streamlit
