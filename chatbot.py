@@ -14,7 +14,9 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph.message import add_messages
 from dotenv import load_dotenv
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint, HuggingFaceEmbeddings
-
+from langchain_community.tools import DuckDuckGoSearchRun
+from langchain_core.tools import tool
+from langgraph.prebuilt import ToolNode, tools_condition
 import sqlite3
 import os
 
@@ -91,7 +93,13 @@ llm = HuggingFaceEndpoint(
     # api_key=HF_API_KEY,
 )
 
-model = ChatHuggingFace(llm=llm)
+main_model = ChatHuggingFace(llm=llm)
+
+search_tool = DuckDuckGoSearchRun(region="us-en")
+
+
+tools = [search_tool]
+model = main_model.bind_tools(tools)
 
 
 # =================================================================================
@@ -117,6 +125,7 @@ def chat_node(state: ChatState):
     
     return {"messages": [response]}
 
+tool_node = ToolNode(tools)
 
 # =================================================================================
 # DATABASE SETUP
@@ -132,8 +141,12 @@ checkpointer = SqliteSaver(conn=connection)
 
 graph = StateGraph(ChatState)
 graph.add_node("chat_node", chat_node)
+graph.add_node("tools",tool_node)
+
+
 graph.add_edge(START, "chat_node")
-graph.add_edge("chat_node", END)
+graph.add_conditional_edges("chat_node",tools_condition)
+graph.add_edge('tools', 'chat_node')
 
 bot = graph.compile(checkpointer=checkpointer)
 
