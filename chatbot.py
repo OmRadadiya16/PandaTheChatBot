@@ -13,7 +13,7 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph.message import add_messages
 from dotenv import load_dotenv
-from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint, HuggingFaceEmbeddings
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.tools import DuckDuckGoSearchRun , WikipediaQueryRun
 from langchain.utilities   import WikipediaAPIWrapper
 from langchain_core.tools import tool
@@ -28,73 +28,15 @@ import os
 # Load environment variables from .env file (for local development)
 load_dotenv()
 
-def get_api_key():
-    """
-    Securely load API key from multiple sources.
-    Priority: Streamlit Secrets → Environment Variables
-    
-    Returns:
-        str: The API key
-        
-    Raises:
-        ValueError: If no API key is found
-    """
-    api_key = None
-    
-    # Try Streamlit secrets first (for deployed apps)
-    try:
-        import streamlit as st
-        # Check if running in Streamlit context
-        if hasattr(st, 'secrets'):
-            api_key = st.secrets.get("HUGGINGFACE_API_KEY", None)
-            if api_key:
-                print("✅ API key loaded from Streamlit secrets")
-                return api_key
-    except Exception as e:
-        print(f"⚠️  Could not load from Streamlit secrets: {e}")
-    
-    # Try environment variable (for local development)
-    api_key = os.getenv("HUGGINGFACE_API_KEY")
-    if api_key:
-        print("✅ API key loaded from environment variable")
-        return api_key
-    
-    # If nothing found, raise error with helpful message
-    raise ValueError(
-        "❌ HuggingFace API key not found!\n"
-        "Please set it in one of these ways:\n"
-        "1. Streamlit Cloud: Settings → Secrets → Add HUGGINGFACE_API_KEY\n"
-        "2. Local: Create .env file with: HUGGINGFACE_API_KEY=your_key\n"
-        "3. Environment: export HUGGINGFACE_API_KEY=your_key\n"
-    )
-
-# Get API key securely
-HF_API_KEY = get_api_key()
-
 
 # =================================================================================
 # LLM SETUP - Language Model Configuration (SECURE)
 # =================================================================================
 
-# Get API key securely
-try:
-    HF_API_KEY = get_api_key()
-    print(f"✅ API Key loaded successfully (length: {len(HF_API_KEY)})")
-except Exception as e:
-    print(f"❌ Error loading API key: {e}")
-    raise
-
 # Setup HuggingFace endpoint with explicit token
-llm = HuggingFaceEndpoint(
-    repo_id="openai/gpt-oss-120b", 
-    task="conversational",
-    huggingfacehub_api_token=HF_API_KEY,  # Explicit token
-    # Alternative parameter names (try if above doesn't work)
-    # token=HF_API_KEY,
-    # api_key=HF_API_KEY,
-)
 
-main_model = ChatHuggingFace(llm=llm)
+
+main_model = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
 
 search_tool = DuckDuckGoSearchRun(region="us-en")
 wikipedia_tool = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
