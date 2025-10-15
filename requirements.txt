@@ -3,13 +3,10 @@ langchain
 langchain-core
 langchain-community
 ddgs
-langchain-openai
-langchain-huggingface
 streamlit
 langchain
 langchain-core
-langchain-openai
-langchain-huggingface
+langchain_google_genai
 langgraph
 python-dotenv
 huggingface-hub
