@@ -6,7 +6,7 @@ ddgs
 streamlit
 langchain
 langchain-core
-langchain_google_genai
+langchain-google-genai
 langgraph
 python-dotenv
 huggingface-hub
