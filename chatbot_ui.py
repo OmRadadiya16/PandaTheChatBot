@@ -72,7 +72,7 @@ def generate_thread_id():
 
 def reset_chat():
     """
-    Create a brand new chat conversation.
+    Create a brand-new chat conversation.
     
     What it does:
         1. Generates a new unique thread_id

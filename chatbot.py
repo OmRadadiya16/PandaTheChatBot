@@ -64,8 +64,9 @@ def chat_node(state: ChatState):
     
     full_messages = [system_message] + messages
     response = model.invoke(full_messages)
-    
-    return {"messages": [response]}
+    clean_text = extract_text(response.content)
+
+    return {"messages": [AIMessage(content=clean_text)]}
 
 tool_node = ToolNode(tools)
 
@@ -138,6 +139,26 @@ def retrieve_all_threads_with_topics():
         threads_with_topics[thread_id] = topic
     
     return threads_with_topics
+
+# =================================================================================
+# MESSAGE CLEANUP HELPERS
+# =================================================================================
+
+def extract_text(content):
+    """
+    Extract readable text from Gemini/LangGraph structured content.
+    Handles cases where the content is a list of dicts or plain text.
+    """
+    if isinstance(content, list):
+        texts = []
+        for item in content:
+            if isinstance(item, dict) and "text" in item:
+                texts.append(item["text"])
+        return "\n".join(texts)
+    elif isinstance(content, str):
+        return content
+    else:
+        return str(content)
 
 
 # =================================================================================
