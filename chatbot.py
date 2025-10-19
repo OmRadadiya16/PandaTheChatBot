@@ -14,7 +14,7 @@ from langgraph.graph.message import add_messages
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.tools import DuckDuckGoSearchRun , WikipediaQueryRun
-from langchain.utilities   import WikipediaAPIWrapper
+from langchain_community.utilities   import WikipediaAPIWrapper
 from langchain_core.tools import tool
 from langgraph.prebuilt import ToolNode, tools_condition
 import sqlite3
