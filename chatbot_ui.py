@@ -199,7 +199,7 @@ else:
     for thread_id, topic in thread_items:
         # Button shows topic name (not ugly thread ID)
         # key=f"btn_{thread_id}" ensures unique button IDs (Streamlit requirement)
-        if st.sidebar.button(topic, key=f"btn_{thread_id}"):
+        if st.sidebar.button(str(topic), key=f"btn_{thread_id}"):
             # User clicked this conversation - load it!
             
             # Update current thread ID
