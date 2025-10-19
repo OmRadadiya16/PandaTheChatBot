@@ -146,19 +146,33 @@ def retrieve_all_threads_with_topics():
 
 def extract_text(content):
     """
-    Extract readable text from Gemini/LangGraph structured content.
-    Handles cases where the content is a list of dicts or plain text.
+    Cleans Gemini or LangGraph message outputs into plain text.
+    Handles nested lists, dicts, or AIMessage objects.
     """
+    # 1. If it's a list — flatten it
     if isinstance(content, list):
         texts = []
         for item in content:
-            if isinstance(item, dict) and "text" in item:
-                texts.append(item["text"])
+            # Recursive call for deeply nested lists
+            text = extract_text(item)
+            if text:
+                texts.append(text)
         return "\n".join(texts)
+
+    # 2. If it's a dict with 'text'
+    elif isinstance(content, dict) and "text" in content:
+        return content["text"]
+
+    # 3. If it's an AIMessage or has a .content attr
+    elif hasattr(content, "content"):
+        return extract_text(content.content)
+
+    # 4. If it's a string — return directly
     elif isinstance(content, str):
-        return content
-    else:
-        return str(content)
+        return content.strip()
+
+    # 5. Fallback
+    return str(content)
 
 
 # =================================================================================
