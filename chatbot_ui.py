@@ -310,7 +310,7 @@ if user_input:
         # Stream the response manually
         for chunk in ai_only_stream():
             full_response += chunk
-            message_placeholder.markdown(full_response + "▌")
+            message_placeholder.markdown(full_response + "I")
         
         # Show final response without cursor
         message_placeholder.markdown(full_response)
