@@ -303,8 +303,19 @@ if user_input:
                 if isinstance(message_chunk, AIMessage):
                     yield message_chunk.content
 
-        # Display streamed response and get final message
-        ai_message = st.write_stream(ai_only_stream())
+        # Container for the streamed response
+        message_placeholder = st.empty()
+        full_response = ""
+
+        # Stream the response manually
+        for chunk in ai_only_stream():
+            full_response += chunk
+            message_placeholder.markdown(full_response + "▌")
+        
+        # Show final response without cursor
+        message_placeholder.markdown(full_response)
+        
+        ai_message = full_response
 
     # =============================================================================
     # SAVE AI RESPONSE TO HISTORY
@@ -314,7 +325,7 @@ if user_input:
     st.session_state['message_history'].append({'role': 'assistant', 'content': ai_message})
     
     # Rerun to refresh sidebar (in case topic was just generated)
-    st.rerun()
+    # st.rerun()
 
 
 # =================================================================================
