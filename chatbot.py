@@ -66,7 +66,10 @@ def chat_node(state: ChatState):
     response = model.invoke(full_messages)
 
 
-    return {"messages": [AIMessage(content=response.content)]}
+    # Clean the response content to ensure it's a string
+    clean_content = extract_text(response.content)
+    
+    return {"messages": [AIMessage(content=clean_content)]}
 
 tool_node = ToolNode(tools)
 

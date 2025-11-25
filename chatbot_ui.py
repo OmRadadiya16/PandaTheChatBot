@@ -44,8 +44,7 @@ from chatbot import (
     generate_topic,                   # Generate topic from message
     save_topic_to_thread,             # Save topic to database
     get_topic_from_thread,            # Get topic from database
-    retrieve_all_threads_with_topics, # Get all threads with their topics
-    extract_text                      # Helper to clean message content
+    retrieve_all_threads_with_topics  # Get all threads with their topics
 )
 from langchain_core.messages import HumanMessage, AIMessage
 import uuid
@@ -214,7 +213,7 @@ else:
             for msg in messages:
                 # Determine role based on message type
                 role = 'user' if isinstance(msg, HumanMessage) else 'assistant'
-                temp_messages.append({'role': role, 'content': extract_text(msg.content)})
+                temp_messages.append({'role': role, 'content': msg.content})
 
             # Update session state with loaded messages
             st.session_state['message_history'] = temp_messages
@@ -302,7 +301,7 @@ if user_input:
             ):
                 # Only yield AI messages (filter out other message types)
                 if isinstance(message_chunk, AIMessage):
-                    yield extract_text(message_chunk.content)
+                    yield message_chunk.content
 
         # Container for the streamed response
         message_placeholder = st.empty()
