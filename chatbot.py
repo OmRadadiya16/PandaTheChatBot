@@ -74,7 +74,7 @@ tool_node = ToolNode(tools)
 # DATABASE SETUP
 # =================================================================================
 
-connection = sqlite3.connect(database='chatbot.db', check_same_thread=False)
+connection = sqlite3.connect(database='chatbot_v2.db', check_same_thread=False)
 checkpointer = SqliteSaver(conn=connection)
 
 
